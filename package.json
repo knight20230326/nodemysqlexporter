@@ -1,11 +1,14 @@
 {
   "name": "mysql-ssh-exporter",
-  "version": "1.0.0",
-  "description": "MySQL SSH Exporter - Zero dependency executable",
-  "main": "exporter.js",
-  "bin": "exporter.js",
+  "version": "2.0.0",
+  "description": "MySQL SSH Manager - GUI application for managing MySQL databases over SSH",
+  "author": "knight20230326 <knight20230326@example.com>",
+  "main": "main.js",
   "scripts": {
-    "start": "node exporter.js"
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder",
+    "dist": "electron-builder --publish=never"
   },
   "pkg": {
     "scripts": [
@@ -22,9 +25,45 @@
     "outputPath": "dist"
   },
   "dependencies": {
-    "ssh2": "^1.15.0",
-    "mysql2": "^3.9.0"
+    "mysql2": "^3.9.0",
+    "ssh2": "^1.15.0"
   },
-  "keywords": ["mysql", "ssh", "backup", "exporter"],
-  "license": "MIT"
+  "keywords": [
+    "mysql",
+    "ssh",
+    "backup",
+    "exporter"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^41.0.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.mysqlsshexporter.app",
+    "productName": "MySQL SSH Manager",
+    "directories": {
+      "output": "release"
+    },
+    "npmRebuild": false,
+    "files": [
+      "**/*",
+      "!dist/",
+      "!release/",
+      "!node_modules/electron/**",
+      "!node_modules/electron-builder/**"
+    ],
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    }
+  }
 }
