@@ -1,0 +1,30 @@
+{
+  "name": "mysql-ssh-exporter",
+  "version": "1.0.0",
+  "description": "MySQL SSH Exporter - Zero dependency executable",
+  "main": "exporter.js",
+  "bin": "exporter.js",
+  "scripts": {
+    "start": "node exporter.js"
+  },
+  "pkg": {
+    "scripts": [
+      "exporter.js",
+      "node_modules/mysql2/**/*.js"
+    ],
+    "assets": [
+      "node_modules/mysql2/**/*"
+    ],
+    "targets": [
+      "node18-linux-x64",
+      "node18-linux-arm64"
+    ],
+    "outputPath": "dist"
+  },
+  "dependencies": {
+    "ssh2": "^1.15.0",
+    "mysql2": "^3.9.0"
+  },
+  "keywords": ["mysql", "ssh", "backup", "exporter"],
+  "license": "MIT"
+}

@@ -1,0 +1,47 @@
+name: Build Executables
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Install pkg
+        run: npm install -g pkg
+      
+      - name: Build x64
+        run: pkg . --targets node18-linux-x64 --output mysql-exporter-linux-x64
+      
+      - name: Build arm64
+        run: pkg . --targets node18-linux-arm64 --output mysql-exporter-linux-arm64
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-binaries
+          path: |
+            mysql-exporter-linux-x64
+            mysql-exporter-linux-arm64
+      
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            mysql-exporter-linux-x64
+            mysql-exporter-linux-arm64
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
